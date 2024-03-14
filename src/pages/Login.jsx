@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,7 @@ function Login() {
     if (auth) {
       navigate('/');
     }
-  }, [auth, navigate]);
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();

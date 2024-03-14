@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -11,7 +11,7 @@ import { AuthContext } from "./context/AuthContext.jsx";
 
 function App() {
   // const [auth, setAuth] = useState(null);
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
   const token = Cookies.get("token");
 
@@ -47,7 +47,7 @@ function App() {
           {/* <AuthContext.Provider value={{ auth, setAuth }}> */}
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={ !auth ? <Login /> : <Navigate replace to='/'/>} />
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={ isUserAdmin ? <Dashboard /> : <Home replace/>} />
             </Routes>
