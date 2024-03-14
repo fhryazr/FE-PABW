@@ -1,16 +1,59 @@
-import { Link, Outlet } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Cookies from "js-cookie";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+import Home from "./pages/Home.jsx";
+import getDecodedToken from "./api/auth/getDecodedToken.js";
+import Dashboard from "./pages/Dashboard.jsx";
+import { AuthContext } from "./context/AuthContext.jsx";
+
 
 function App() {
+  // const [auth, setAuth] = useState(null);
+  const { auth, setAuth } = useContext(AuthContext);
+  const [isUserAdmin, setIsUserAdmin] = useState(false);
+  const token = Cookies.get("token");
+
+  useEffect(() => {
+    const authorization = async () => {
+      if (token) {
+        try {
+          const res = await getDecodedToken(token);
+          setAuth({
+            userId: res.userId,
+            fullname: res.fullname,
+            role: res.role,
+          });
+          if (res.role === "ADMIN") {
+            setIsUserAdmin(true);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    authorization();
+  }, []);
+
+  // Pengecekan apakah auth sudah terisi sebelum mengakses propertinya
+  console.log(auth);
+
   return (
     <>
-      <main className="w-screen h-screen">
-        <Outlet />
-        <Link to="login">
-          <button className="h-[43px] w-[10rem] bg-green-400 rounded-[5px] text-white font-medium">
-            Login
-          </button>
-        </Link>
-      </main>
+      <Router>
+        <main className="w-screen h-screen">
+          {/* <AuthContext.Provider value={{ auth, setAuth }}> */}
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/dashboard" element={ isUserAdmin ? <Dashboard /> : <Home replace/>} />
+            </Routes>
+          {/* </AuthContext.Provider> */}
+        </main>
+      </Router>
     </>
   );
 }
