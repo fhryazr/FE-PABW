@@ -11,7 +11,7 @@ import { AuthContext } from "./context/AuthContext.jsx";
 
 function App() {
   // const [auth, setAuth] = useState(null);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { setAuth } = useContext(AuthContext);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
   const token = Cookies.get("token");
 
@@ -35,10 +35,10 @@ function App() {
     };
 
     authorization();
-  }, []);
+  }, [setAuth, token]);
 
   // Pengecekan apakah auth sudah terisi sebelum mengakses propertinya
-  console.log(auth);
+  // console.log(auth);
 
   return (
     <>

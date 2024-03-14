@@ -24,21 +24,22 @@ const AuthProvider = ({ children }) => {
           password,
         }),
       });
+
+      const result = await response.json();
   
       if (response.ok) {
-        const result = await response.json();
         Cookies.set("token", result.token, { expires: 3 / 24 });
-        
+        setAuth(result)
       } else {
-        const errorResult = await response.json();
-        setError(errorResult.msg);
-        console.error("Error during login:", errorResult.msg);
+        setError(result.msg);
+        console.error("Error during login:", result.msg);
       }
     } catch (error) {
       console.error("Error during login:", error.message);
     }
   };
 
+  console.log(auth)
   const logout = () => {
     // Implementasi logout API
     Cookies.remove("token");

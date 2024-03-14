@@ -1,22 +1,29 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, error } = useContext(AuthContext);
+  const { auth, login, error } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // Efek untuk memantau perubahan nilai auth
+  useEffect(() => {
+    // Jika auth berubah menjadi tidak null, redirect ke halaman utama
+    if (auth) {
+      navigate('/');
+    }
+  }, [auth, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
       await login(email, password);
-      navigate('/');
-      navigate(0);
+      // Tidak perlu melakukan pengecekan lagi di sini
     } catch (error) {
       console.error("Error during login:", error.message);
+      // Tambahkan logika penanganan error di sini jika diperlukan
     }
   };
 
