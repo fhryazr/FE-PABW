@@ -7,13 +7,15 @@ import ProductWrapper from "../components/product/ProdukWrapper";
 import { AuthContext } from "../context/AuthContext";
 
 function Home() {
-  const {auth} = useContext(AuthContext)
-  
+  const { auth } = useContext(AuthContext);
+
   return (
     <div>
-      <Navbar auth={auth}/>
+      <Navbar auth={auth} />
       <Hero />
-      <ProductWrapper />
+      <div className="container mx-auto">
+        <ProductWrapper />
+      </div>
       <Footer />
     </div>
   );
