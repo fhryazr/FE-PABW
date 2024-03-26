@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { FaRegUser } from "react-icons/fa6";
 import { AuthContext } from "../context/AuthContext";
 import { BsCart } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 function Navbar({ auth }) {
   const { logout } = useContext(AuthContext);
@@ -48,6 +49,11 @@ function Navbar({ auth }) {
                 className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li>
                   <a className="justify-between">Profile</a>
+                </li>
+                <li>
+                  <Link to={"/store"}>
+                  <a className="justify-between">My Store</a>
+                  </Link>
                 </li>
                 <li>
                   <a onClick={handleLogout}>Logout</a>

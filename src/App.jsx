@@ -7,6 +7,7 @@ import Home from "./pages/Home.jsx";
 import getDecodedToken from "./api/auth/getDecodedToken.js";
 import Dashboard from "./pages/Dashboard.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
+import Store from "./pages/StorePage.jsx";
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
               <Route path="/login" element={ !auth ? <Login /> : <Navigate replace to='/'/>} />
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={ isUserAdmin ? <Dashboard /> : <Home replace/>} />
+              <Route path="/store" element={<Store />} />
             </Routes>
           {/* </AuthContext.Provider> */}
         </main>
