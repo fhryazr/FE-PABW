@@ -1,5 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Cookies from "js-cookie";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -7,7 +12,7 @@ import Home from "./pages/Home.jsx";
 import getDecodedToken from "./api/auth/getDecodedToken.js";
 import Dashboard from "./pages/Dashboard.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
-
+import Pembayaran from "./pages/Pembayaran.jsx";
 
 function App() {
   // const [auth, setAuth] = useState(null);
@@ -45,12 +50,19 @@ function App() {
       <Router>
         <main className="w-screen h-screen">
           {/* <AuthContext.Provider value={{ auth, setAuth }}> */}
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={ !auth ? <Login /> : <Navigate replace to='/'/>} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/dashboard" element={ isUserAdmin ? <Dashboard /> : <Home replace/>} />
-            </Routes>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/login"
+              element={!auth ? <Login /> : <Navigate replace to="/" />}
+            />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/dashboard"
+              element={isUserAdmin ? <Dashboard /> : <Home replace />}
+            />
+            <Route path="/Pembayaran" element={<Pembayaran />} />
+          </Routes>
           {/* </AuthContext.Provider> */}
         </main>
       </Router>
