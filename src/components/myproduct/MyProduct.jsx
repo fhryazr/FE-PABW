@@ -1,5 +1,5 @@
-import { PropTypes } from "prop-types";
-import { BsCartPlus } from "react-icons/bs";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 function MyProduct({ name, price, description}) {
@@ -29,8 +29,8 @@ function MyProduct({ name, price, description}) {
               </p>
             )}
           </div>
-          <Link to={`/detail-order/${id}`}>
-            <button className="btn btn-sm ml-auto">Detail Order</button>
+          <Link to={`/detail-order/`}>
+            <button className="btn btn-sm ml-auto">Detail Produk</button>
           </Link>
         </div>
       </div>
@@ -42,7 +42,6 @@ MyProduct.propTypes = {
   name: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
 };
 
 export default MyProduct;
