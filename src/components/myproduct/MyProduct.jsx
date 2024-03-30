@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { PropTypes } from "prop-types";
+import { BsCartPlus } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 
-function Order({ name, price, description, id }) {
+function MyProduct({ name, price, description}) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -38,11 +38,11 @@ function Order({ name, price, description, id }) {
   );
 }
 
-Order.propTypes = {
+MyProduct.propTypes = {
   name: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
 };
 
-export default Order;
+export default MyProduct;

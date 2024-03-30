@@ -17,7 +17,7 @@ function Navbar({ auth }) {
     <div className="sticky top-0 mx-auto md:px-8 navbar justify-center bg-white shadow-lg z-10">
       {/* Logo */}
       <div className="flex-1">
-        <a className="pl-2 text-xl">E-Commerce</a>
+        <Link to = "/"><a className="pl-2 text-xl">E-Commerce</a></Link>
       </div>
       <div className="navbar-end gap-3">
         <div className="flex">
