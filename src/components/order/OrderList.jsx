@@ -28,8 +28,9 @@ function OrderList() {
     return (
         <React.Fragment>
           {orders.map((order) => (
+            // console.log(order.id)
             <li key={order.id} className="list-item mb-2">
-              <Order name={order.name} price={order.price} description={order.description} />
+              <Order name={order.name} price={order.price} description={order.description} id={order.id}/>
             </li>
           ))}
         </React.Fragment>

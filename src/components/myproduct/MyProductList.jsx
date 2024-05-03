@@ -1,5 +1,6 @@
-import MyProduct from './myProduct';
 import React from 'react';
+import Product from '../product/Product';
+import MyProduct from './myProduct';
 
 function MyProductList() {
   const products = [
@@ -23,16 +24,14 @@ function MyProductList() {
     { id: 18, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
     { id: 19, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
     { id: 20, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-];
+  ];
 
   return (
-    <React.Fragment>
-      {products.map((order) => (
-        <li key={order.id} className="list-item mb-2">
-          <MyProduct name={order.name} price={order.price} description={order.description} />
-        </li>
+    <div className="overflow-x-auto">
+      {products.map((product) => (
+        <MyProduct key={product.id} name={product.name} price={product.price} description={product.description} />
       ))}
-    </React.Fragment>
+    </div>
   );
 }
 
