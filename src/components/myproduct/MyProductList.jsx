@@ -1,6 +1,6 @@
 import React from 'react';
-import Product from '../product/Product';
-import MyProduct from './myProduct';
+import MyProduct from './MyProduct';
+import { Table, TableBody, TableHead, TableHeadCell} from "flowbite-react";
 
 function MyProductList() {
   const products = [
@@ -28,9 +28,22 @@ function MyProductList() {
 
   return (
     <div className="overflow-x-auto">
-      {products.map((product) => (
-        <MyProduct key={product.id} name={product.name} price={product.price} description={product.description} />
-      ))}
+      <Table hoverable>
+        <TableHead>
+          <TableHeadCell>Image</TableHeadCell>
+          <TableHeadCell>Product Name</TableHeadCell>
+          <TableHeadCell>Description</TableHeadCell>
+          <TableHeadCell>Price</TableHeadCell>
+          <TableHeadCell>
+            <span className="sr-only">Edit</span>
+          </TableHeadCell>
+        </TableHead>
+        <TableBody className="divide-y">
+          {products.map((product) => (
+            <MyProduct key={product.id} name={product.name} price={product.price} description={product.description} imageSrc="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" /> // Replace with your image URL
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

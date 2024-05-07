@@ -1,5 +1,6 @@
 import Order from "./Order";
 import React from 'react';
+import { Table, TableBody, TableHead, TableHeadCell} from "flowbite-react";
 
 function OrderList() {
     const orders = [
@@ -26,16 +27,26 @@ function OrderList() {
     ];
 
     return (
-        <React.Fragment>
-          {orders.map((order) => (
-            // console.log(order.id)
-            <li key={order.id} className="list-item mb-2">
-              <Order name={order.name} price={order.price} description={order.description} id={order.id}/>
-            </li>
-          ))}
-        </React.Fragment>
-      );
-}
+      <div className="overflow-x-auto">
+        <Table hoverable>
+          <TableHead>
+            <TableHeadCell>Image</TableHeadCell>
+            <TableHeadCell>Product Name</TableHeadCell>
+            <TableHeadCell>Description</TableHeadCell>
+            <TableHeadCell>Price</TableHeadCell>
+            <TableHeadCell>
+              <span className="sr-only">Edit</span>
+            </TableHeadCell>
+          </TableHead>
+          <TableBody className="divide-y">
+            {orders.map((order) => (
+              <Order key={order.id} name={order.name} price={order.price} description={order.description} imageSrc="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" /> // Replace with your image URL
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
 
 export default OrderList;
   
