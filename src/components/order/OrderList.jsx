@@ -35,7 +35,7 @@ function OrderList() {
             <TableHeadCell>Description</TableHeadCell>
             <TableHeadCell>Price</TableHeadCell>
             <TableHeadCell>
-              <span className="sr-only">Edit</span>
+              <span className="sr-only">Details</span>
             </TableHeadCell>
           </TableHead>
           <TableBody className="divide-y">

@@ -8,6 +8,7 @@ import getDecodedToken from "./api/auth/getDecodedToken.js";
 import Dashboard from "./pages/Dashboard.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
 import Store from "./pages/StorePage.jsx";
+import EditProduct from "./components/myproduct/EditMyProduct.jsx";
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={ isUserAdmin ? <Dashboard /> : <Home replace/>} />
               <Route path="/store" element={<Store />} />
+              <Route path="/edit-product" element={<EditProduct/>} />
             </Routes>
           {/* </AuthContext.Provider> */}
         </main>

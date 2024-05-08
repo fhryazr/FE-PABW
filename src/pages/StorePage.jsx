@@ -13,7 +13,7 @@ function Store() {
       <Navbar auth={auth} />
       <div className="container mx-auto">
         < MyProductWrapper/>
-        <OrderWrapper/>
+        {/* <OrderWrapper/> */}
       </div>
       <Footer />
     </div>

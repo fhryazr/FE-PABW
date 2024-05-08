@@ -19,7 +19,7 @@ function Order({ name, price, description, imageSrc }) {
       <TableCell>{price}</TableCell>
       <TableCell>
         <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-          Edit
+          Details
         </a>
       </TableCell>
     </TableRow>
