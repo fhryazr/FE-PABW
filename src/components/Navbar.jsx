@@ -1,16 +1,50 @@
 /* eslint-disable react/prop-types */
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaRegUser } from "react-icons/fa6";
 import { AuthContext } from "../context/AuthContext";
 import { BsCart } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+import useCartStore from "../store/cartStore";
+import { getCart } from "../api/cart";
+import Cookies from "js-cookie";
+
 
 function Navbar({ auth }) {
+  const navigate = useNavigate();
+  const token = Cookies.get("token");
+  const [cartLen, setCartLen] = useState(0)
+
   const { logout } = useContext(AuthContext);
+  const { cartList, setCartList } = useCartStore()
   // console.log(auth);
 
   const handleLogout = async () => {
     await logout();
   };
+
+  const navigateCart = () => {
+    navigate('/cart')
+  }
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      const cartData = await getCart(token);
+
+      const simplifiedCart = cartData?.data?.detail_carts.map(cart => ({
+        id: cart?.id_product,
+        name: cart?.product?.namaProduk,
+        price: cart?.product?.hargaProduk,
+        images: cart?.product?.imagesProduct,
+        quantity: cart?.jumlah_barang
+      }));
+
+      setCartList(simplifiedCart)
+      setCartLen(simplifiedCart.length)
+    }
+    if (auth) {
+      fetchCart()
+    }
+  }, [token, cartList.length, setCartList, auth])
 
   return (
     <div className="sticky top-0 mx-auto md:px-8 navbar justify-center bg-white shadow-lg z-10">
@@ -25,10 +59,11 @@ function Navbar({ auth }) {
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle">
+              className="btn btn-ghost btn-circle"
+              onClick={navigateCart}>
               <div className="indicator">
                 <BsCart className="text-xl md:text-2xl"/>
-                <span className="badge badge-sm indicator-item">8</span>
+                {<span className="badge badge-sm indicator-item">{cartLen}</span>}
               </div>
             </div>
           </div>
