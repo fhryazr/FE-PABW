@@ -75,7 +75,7 @@ const ProductDetail = () => {
               <p className="text-md mb-2">Stok Produk : {product.stokProduk}</p>
               <div className="h-[15rem] text-justify text-pretty mb-2">
                 <p className="h-full overflow-y-auto text-gray-700 ">
-                  {product.description || "Tidak ada deskripsi produk"}
+                  {product.description || "This product doesn't have any description"}
                 </p>
               </div>
               <div className="flex flex-col gap-4">
@@ -95,7 +95,7 @@ const ProductDetail = () => {
               <span>
                 <HiArrowSmLeft className="text-[1.5rem]" />
               </span>
-              back to shopping
+              go back
             </button>
           </div>
         </>

@@ -34,7 +34,7 @@ function CartPage() {
         <span>
           <HiArrowSmLeft className="text-[1.5rem]" />
         </span>
-        back to shopping
+        go back
       </button>
     </div>
       </div>

@@ -14,8 +14,8 @@ function formatPrice(price) {
 }
 
 function Product({ id, name, price, images }) {
-  const token = Cookies.get('token')
-  const { setCartList } = useCartStore()
+  const token = Cookies.get("token");
+  const { setCartList } = useCartStore();
 
   const addProductToCart = async () => {
     try {
@@ -28,21 +28,23 @@ function Product({ id, name, price, images }) {
         quantity: 1,
         isSelected: false,
       };
-      setCartList(simplifiedCart)
-      console.log('Product added to cart successfully!');
+      setCartList(simplifiedCart);
+      console.log("Product added to cart successfully!");
     } catch (error) {
-      console.error('Error adding product to cart:', error);
+      console.error("Error adding product to cart:", error);
     }
   };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const navigateDetail = () => {
-    navigate(`/product/${id}`)
-  }
+    navigate(`/product/${id}`);
+  };
 
   return (
-    <div className="card rounded-xl p-2 md:w-[15rem] bg-base-100 shadow-lg md:shadow-xl hover:bg-base-200 transition ease-in-out" onClick={navigateDetail}>
+    <div
+      className="card rounded-xl p-2 md:w-[15rem] bg-base-100 shadow-lg md:shadow-xl hover:cursor-pointer hover:bg-base-200 transition ease-in-out"
+      onClick={navigateDetail}>
       <figure className="rounded-xl">
         {/* Gambar produk */}
         <img
@@ -61,12 +63,14 @@ function Product({ id, name, price, images }) {
         </h2>
         {/* Harga produk */}
         <p className="font-semibold text-[1.2rem]">{formatPrice(price)}</p>
-        <div className="card-actions w-full justify-between">
+        <div className="card-actions w-full justify-between z-1">
           {/* Tombol Tambah ke Keranjang */}
           <button
             className="w-full btn btn-outline text-sm font-normal"
-            onClick={addProductToCart}
-          >
+            onClick={(e) => {
+              e.stopPropagation(); // Menghentikan penyebaran event
+              addProductToCart();
+            }}>
             <BsCartPlus size={"1.2rem"} /> Add To Cart
           </button>
         </div>

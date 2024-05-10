@@ -12,10 +12,9 @@ import Cookies from "js-cookie";
 function Navbar({ auth }) {
   const navigate = useNavigate();
   const token = Cookies.get("token");
-  const [cartLen, setCartLen] = useState(0)
-
   const { logout } = useContext(AuthContext);
   const { cartList, setCartList } = useCartStore()
+  const [cartLen, setCartLen] = useState(cartList.lenght || 0)
   // console.log(auth);
 
   const handleLogout = async () => {
