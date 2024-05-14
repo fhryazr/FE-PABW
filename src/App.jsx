@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import DetailProductPage from "./pages/DetailProductPage.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
               <Route path="/dashboard" element={ isUserAdmin ? <Dashboard /> : <Home replace/>} />
               <Route path="/cart" element={ <CartPage />} />
               <Route path="/product/:id_product" element={ <DetailProductPage/>} />
+              <Route path="*" element={ <NotFound/>} />
             </Routes>
           {/* </AuthContext.Provider> */}
         </main>

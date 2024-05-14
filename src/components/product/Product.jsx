@@ -31,7 +31,11 @@ function Product({ id, name, price, images }) {
       setCartList(simplifiedCart);
       console.log("Product added to cart successfully!");
     } catch (error) {
-      console.error("Error adding product to cart:", error);
+      if (error.response && error.response.status === 401) {
+        navigate('/login')
+      } else {
+        console.error("Error adding product to cart:", error);
+      }
     }
   };
 
