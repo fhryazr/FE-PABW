@@ -47,7 +47,7 @@ function Navbar({ auth }) {
   }, [token, cartList.length, setCartList, auth]);
 
   return (
-    <div className="sticky top-0 mx-auto md:px-8 navbar justify-center bg-white shadow-lg z-10">
+    <div className="sticky top-0 mx-auto md:px-8 navbar justify-center bg-white shadow-lg z-10 mb-4">
       {/* Logo */}
       <div className="flex-1">
         <a className="pl-2 text-xl">E-Commerce</a>
@@ -77,7 +77,8 @@ function Navbar({ auth }) {
               <div
                 tabIndex={0}
                 role="button"
-                className="btn btn-ghost btn-circle">
+                className="btn btn-ghost btn-circle"
+              >
                 <div className="avatar placeholder">
                   <FaRegUser className="text-lg md:text-2xl" />
                 </div>

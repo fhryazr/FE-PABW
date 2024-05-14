@@ -3,14 +3,12 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
+    "node_modules/flowbite-react/lib/esm/**/*.js",
   ],
-  theme: [
-    "light"
-  ],
+  theme: ["light"],
   // eslint-disable-next-line no-undef
-  plugins: [require('daisyui')],
+  plugins: [require("daisyui", "flowbite/plugin")],
   daisyui: {
     styled: true,
-  }
-}
-
+  },
+};

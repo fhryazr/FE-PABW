@@ -1,5 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Cookies from "js-cookie";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -10,7 +15,7 @@ import { AuthContext } from "./context/AuthContext.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import DetailProductPage from "./pages/DetailProductPage.jsx";
 import NotFound from "./pages/NotFound.jsx";
-
+import Pembayaran from "./pages/Pembayaran.jsx";
 
 function App() {
   // const [auth, setAuth] = useState(null);
@@ -49,15 +54,22 @@ function App() {
       <Router>
         <main className="w-full h-screen">
           {/* <AuthContext.Provider value={{ auth, setAuth }}> */}
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={ !auth ? <Login /> : <Navigate replace to='/'/>} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/dashboard" element={ isUserAdmin ? <Dashboard /> : <Home replace/>} />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/login"
+              element={!auth ? <Login /> : <Navigate replace to="/" />}
+            />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/dashboard"
+              element={isUserAdmin ? <Dashboard /> : <Home replace />}
+            />
+            <Route path="/Pembayaran" element={<Pembayaran />} />
               <Route path="/cart" element={ <CartPage />} />
               <Route path="/product/:id_product" element={ <DetailProductPage/>} />
               <Route path="*" element={ <NotFound/>} />
-            </Routes>
+          </Routes>
           {/* </AuthContext.Provider> */}
         </main>
       </Router>
