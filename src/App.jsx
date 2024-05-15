@@ -7,8 +7,11 @@ import Home from "./pages/Home.jsx";
 import getDecodedToken from "./api/auth/getDecodedToken.js";
 import Dashboard from "./pages/Dashboard.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
-import Store from "./pages/StorePage.jsx";
-
+// import Store from "./pages/StorePage.jsx";
+import Kurir from "./pages/Kurir.jsx";
+import ProfilPage from "./components/kurir/ProfilPage";
+import ListPesananPage from "./components/kurir/ListPesananPage";
+import UbahSandi from "./components/kurir/UbahSandi";
 
 function App() {
   // const [auth, setAuth] = useState(null);
@@ -51,7 +54,11 @@ function App() {
               <Route path="/login" element={ !auth ? <Login /> : <Navigate replace to='/'/>} />
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={ isUserAdmin ? <Dashboard /> : <Home replace/>} />
-              <Route path="/store" element={<Store />} />
+              {/* <Route path="/store" element={<Store />} /> */}
+              <Route path="/kurir" element={<Kurir/>} />
+              <Route path="/kurir/profil" element={<ProfilPage />} />
+              <Route path="/kurir/list-pesanan" element={<ListPesananPage />} />
+              <Route path="/kurir/ubah-kata-sandi" element={<UbahSandi />} />
             </Routes>
           {/* </AuthContext.Provider> */}
         </main>
