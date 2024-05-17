@@ -16,19 +16,22 @@ import CartPage from "./pages/CartPage.jsx";
 import DetailProductPage from "./pages/DetailProductPage.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Pembayaran from "./pages/Pembayaran.jsx";
+import TransaksiPage from "./pages/TransaksiPembeli.jsx";
+import MyProfile from "./pages/MyProfile.jsx";
 
 function App() {
   // const [auth, setAuth] = useState(null);
   const { auth, setAuth } = useContext(AuthContext);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
   const token = Cookies.get("token");
+  // const navigate = useNavigate()
 
   useEffect(() => {
     const authorization = async () => {
       if (token) {
         try {
           const res = await getDecodedToken(token);
-          console.log(res)
+          console.log(res);
           setAuth({
             userId: res.userId,
             fullname: res.fullname,
@@ -36,7 +39,8 @@ function App() {
           });
           if (res.role === "ADMIN") {
             setIsUserAdmin(true);
-          } 
+            // navigate('/dashboard')
+          }
         } catch (error) {
           console.log(error);
         }
@@ -56,6 +60,7 @@ function App() {
           {/* <AuthContext.Provider value={{ auth, setAuth }}> */}
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<MyProfile />} />
             <Route
               path="/login"
               element={!auth ? <Login /> : <Navigate replace to="/" />}
@@ -65,10 +70,21 @@ function App() {
               path="/dashboard"
               element={isUserAdmin ? <Dashboard /> : <Home replace />}
             />
-            <Route path="/Pembayaran" element={<Pembayaran />} />
-              <Route path="/cart" element={ <CartPage />} />
-              <Route path="/product/:id_product" element={ <DetailProductPage/>} />
-              <Route path="*" element={ <NotFound/>} />
+            <Route path="/pembayaran" element={<Pembayaran />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route
+              path="/product/:id_product"
+              element={<DetailProductPage />}
+            />
+            <Route
+              path="/my-orders"
+              element={<TransaksiPage />}
+            />
+            <Route
+              path="/my-store"
+              element={<TransaksiPage />}
+            />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           {/* </AuthContext.Provider> */}
         </main>

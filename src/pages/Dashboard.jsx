@@ -1,8 +1,14 @@
+import UserList from "../components/admin/UserList";
+import DashboardLayout from "./DashboardLayout";
 
 function Dashboard() {
   return (
-    <div> ini Dashboard</div>
-  )
+    <div>
+      <DashboardLayout>
+        <UserList />
+      </DashboardLayout>
+    </div>
+  );
 }
 
-export default Dashboard
+export default Dashboard;

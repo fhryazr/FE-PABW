@@ -16,11 +16,11 @@ function CartItem({ id, name, price, images, quantity }) {
   const [counter, setCounter] = useState(quantity);
   const { removeItem, toggleSelectedItem, updateItemQuantity } = useCartStore();
   const token = Cookies.get("token");
-  const isSelected = Cookies.get("cart") ? JSON.parse(Cookies.get("cart")).find(item => item.id === id)?.isSelected || false : false;
+  const isSelected = Cookies.get("cart") ? JSON.parse(Cookies.get("cart")).find(item => item.id === id)?.isSelected : false;
 
   useEffect(() => {
-    toggleSelectedItem(id, isSelected);
-    console.log(useCartStore.getState().cartList);
+    // toggleSelectedItem(id, !isSelected);
+    // console.log(useCartStore.getState().cartList);
   }, [isSelected, id, toggleSelectedItem]);
 
   const updateCartQuantityInCookies = (productId, newQuantity) => {
