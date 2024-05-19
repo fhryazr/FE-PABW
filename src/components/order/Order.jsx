@@ -1,24 +1,55 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { BsPencilSquare, BsTruck, BsCheckCircle, BsClockHistory, BsSave } from 'react-icons/bs';
+import { BsPencilSquare, BsTruck, BsCheckCircle, BsClockHistory, BsSave, BsArrowReturnLeft } from 'react-icons/bs';
 
-function Order({ name, price, description, address, phone, status }) {
+function Order({ orderDate, jumlahBarang, total_harga, status, product, id_detailPesanan }) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(status);
-  const [marginStyle, setMarginStyle] = useState({ marginLeft: '-10rem', marginRight: '20rem' });
+  const [marginStyle, setMarginStyle] = useState({ marginLeft: '-12rem', marginRight: '25rem' });
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImZ1bGxuYW1lIjoiZ2FtZXIiLCJyb2xlIjoiS1VSSVIiLCJpYXQiOjE3MTYxNDE5NjAsImV4cCI6MTcxNjE1Mjc2MH0.qmd4s_ueWUZrDtjerWAebjAaZlHblESnfy2GZdFxZbM';
 
   const handleStatusChange = (newStatus) => {
     setCurrentStatus(newStatus);
+    console.log('id_detailPesanan:', id_detailPesanan);
+    console.log('newStatus:', newStatus);
   };
 
   const handleSave = () => {
-    setIsEditing(false);
-    setMarginStyle({ marginLeft: '-10rem', marginRight: '20rem' });
+    fetch('http://localhost:3000/order/edit', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        status: currentStatus.toLowerCase(),
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Status updated successfully', data);
+      setIsEditing(false);
+      setMarginStyle({ marginLeft: '-10rem', marginRight: '20rem' });
+    })
+    .catch(error => {
+      console.error('There was an error updating the status!', error);
+    });
   };
-
+  
   const handleEditClick = () => {
     setIsEditing(true);
     setMarginStyle({ marginLeft: '-8rem', marginRight: '-11rem' });
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('id-ID', options);
   };
 
   return (
@@ -27,40 +58,44 @@ function Order({ name, price, description, address, phone, status }) {
         <figure className="w-1/4">
           <img
             src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-            alt={name}
+            alt={product.namaProduk}
             className="w-full h-full object-cover"
           />
         </figure>
         <div className="flex flex-col w-3/4 p-4">
-          <h2 className="font-bold text-[16px] text-pretty">{name}</h2>
-          <p className="font-[700] text-[18px]">{price}</p>
-          <p className="text-[12px] text-gray-500 text-pretty">{description}</p>
-          <p className="text-[12px] text-gray-500 text-pretty">Alamat: {address}</p>
-          <p className="text-[12px] text-gray-500 text-pretty">Telepon: {phone}</p>
-          <p className="text-[12px] text-gray-500 text-pretty">Status: {currentStatus}</p>
+          <p>Order Date: {formatDate(orderDate)}</p>
+          <p>Jumlah Barang: {jumlahBarang}</p>
+          <p>Total Harga: {total_harga}</p>
+          <p>Status: {currentStatus}</p>
+          <div className="mt-2">
+            <h4>Product Details:</h4>
+            <p>Nama Produk: {product.namaProduk}</p>
+            <p>Harga Produk: {product.hargaProduk}</p>
+            <p>Stok Produk: {product.stokProduk}</p>
+            <p>Status Produk: {product.statusProduk}</p>
+            <p>Description: {product.description}</p>
+          </div>
           <div className="card-actions mt-2">
             {isEditing ? (
               <>
                 <button
-                  className={`btn btn-outline text-[10px] md:text-lg ${currentStatus === 'Menunggu' ? 'bg-yellow-400 text-white' : ''}`}
-                  style={{ paddingLeft: '10px', paddingRight: '10px' }}
-                  onClick={() => handleStatusChange('Menunggu')}
+                  className={`btn btn-outline text-[10px] md:text-lg ${currentStatus === 'Sedang Dikirim' ? 'bg-green-400 text-white' : ''}`}
+                  onClick={() => handleStatusChange('Sedang Dikirim')}
+                  style={{ paddingLeft: '19px', paddingRight: '34px' }}
                 >
-                  <BsClockHistory /> Status Menunggu
+                  <BsTruck /> Sedang Dikirim
                 </button>
                 <button
-                  className={`btn btn-outline text-[10px] md:text-lg ${currentStatus === 'Dikirim' ? 'bg-green-400 text-white' : ''}`}
-                  style={{ paddingLeft: '26px', paddingRight: '27px' }}
-                  onClick={() => handleStatusChange('Dikirim')}
+                  className={`btn btn-outline text-[10px] md:text-lg ${currentStatus === 'Sampai di Tujuan' ? 'bg-blue-400 text-white' : ''}`}
+                  onClick={() => handleStatusChange('Sampai di Tujuan')}
                 >
-                  <BsTruck /> Status Dikirim
+                  <BsCheckCircle /> Sampai di Tujuan
                 </button>
                 <button
-                  className={`btn btn-outline text-[10px] md:text-lg ${currentStatus === 'Diterima' ? 'bg-blue-400 text-white' : ''}`}
-                  style={{ paddingLeft: '18px', paddingRight: '18px' }}
-                  onClick={() => handleStatusChange('Diterima')}
+                  className={`btn btn-outline text-[10px] md:text-lg ${currentStatus === 'Dikirim Balik' ? 'bg-red-400 text-white' : ''}`}
+                  onClick={() => handleStatusChange('Dikirim Balik')}
                 >
-                  <BsCheckCircle /> Status Diterima
+                  <BsArrowReturnLeft /> Dikirim Balik
                 </button>
                 <button className="btn btn-outline text-[10px] md:text-lg" onClick={handleSave}>
                   <BsSave /> Simpan
@@ -79,12 +114,18 @@ function Order({ name, price, description, address, phone, status }) {
 }
 
 Order.propTypes = {
-  name: PropTypes.string.isRequired,
-  price: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
-  phone: PropTypes.string.isRequired,
+  orderDate: PropTypes.string.isRequired,
+  jumlahBarang: PropTypes.number.isRequired,
+  total_harga: PropTypes.number.isRequired,
   status: PropTypes.string.isRequired,
+  product: PropTypes.shape({
+    namaProduk: PropTypes.string.isRequired,
+    hargaProduk: PropTypes.number.isRequired,
+    stokProduk: PropTypes.number.isRequired,
+    statusProduk: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }).isRequired,
+  id_detailPesanan: PropTypes.number.isRequired,
 };
 
 export default Order;

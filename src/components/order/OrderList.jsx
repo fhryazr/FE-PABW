@@ -1,26 +1,55 @@
+import React, { useEffect, useState } from 'react';
 import Order from './Order';
 
 function OrderList() {
-  const orders = [
-    { id: 1, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000', address: 'Jl. Merdeka', phone: '089898989898', status: 'Menunggu' },
-    { id: 2, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000', address: 'Jl. Merdeka', phone: '089898989898', status: 'Dikirim' },
-    { id: 3, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000', address: 'Jl. Merdeka', phone: '089898989898', status: 'Diterima' },
-    { id: 4, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000', address: 'Jl. Merdeka', phone: '089898989898', status: 'Menunggu' },
-    { id: 5, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000', address: 'Jl. Merdeka', phone: '089898989898', status: 'Dikirim' },
-  ];
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImZ1bGxuYW1lIjoiZ2FtZXIiLCJyb2xlIjoiS1VSSVIiLCJpYXQiOjE3MTYxNDI4NjUsImV4cCI6MTcxNjE1MzY2NX0.YE-Im9sKYOBBQpu-thjV6bnrh1V5IzIqZ6s7Ov-znm4';
+
+    fetch('http://localhost:3000/order/kurir', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setOrders(data.orders);
+      setLoading(false);
+    })
+    .catch(error => {
+      console.error('There was an error fetching the orders!', error);
+      setError(error);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading orders: {error.message}</p>;
 
   return (
     <div className="flex flex-col space-y-4 px-2">
-      {orders.map((order) => (
-        <Order
-          key={order.id}
-          name={order.name}
-          description={order.description}
-          price={order.price}
-          address={order.address}
-          phone={order.phone}
-          status={order.status}
-        />
+      {orders.map(order => (
+        <div key={order.id_order}>
+          {order.orderDetails.map(detail => (
+            <Order
+              key={detail.id_detailPesanan}
+              orderDate={detail.orderDate}
+              jumlahBarang={detail.jumlahBarang}
+              total_harga={detail.total_harga}
+              status={detail.status}
+              product={detail.product}
+              id_detailPesanan={detail.id_detailPesanan}
+            />
+          ))}
+        </div>
       ))}
     </div>
   );
