@@ -1,329 +1,171 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import { AuthContext } from "../context/AuthContext";
+import { getMe, getUsers } from "../api/auth";
+import Cookies from "js-cookie";
+import ListProdukPembayaran from "../components/pembayaran/ListProdukPembayaran";
+import useCartStore from "../store/cartStore";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 function Pembayaran() {
-  const [amount, setAmount] = useState("");
-  const [eWallet, setEwallet] = useState(""); // Change from description to eWallet
-  const [phoneNumber, setPhoneNumber] = useState(""); // Added phoneNumber state
-  const [shippingAddress, setShippingAddress] = useState(""); // Added shippingAddress state
-  const { isAuthenticated } = useContext(AuthContext); // Assuming this context provides an isAuthenticated flag
-  const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
+  const token = Cookies.get("token");
+  const selectedProduct = JSON.parse(Cookies.get("cart"));
 
-  const handlePayment = async (e) => {
-    e.preventDefault();
+  const [dataUser, setDataUser] = useState();
+  const [couriers, setCouriers] = useState([]);
+  const { selectedItems } = useCartStore();
+  const navigate = useNavigate()
 
-    if (!isAuthenticated) {
-      console.error("User must be logged in to proceed with the payment.");
-      navigate("/login");
-      return;
-    }
+  useEffect(() => {
+    const getData = async () => {
+      const fetchData = await getMe(token);
+      setDataUser(fetchData);
+    };
+    getData();
 
-    // Payment processing logic would go here
+    // Panggil API untuk mendapatkan daftar kurir
+    const fetchCouriers = async () => {
+      try {
+        const response = await getUsers(token);
+        // Filter pengguna berdasarkan peran 'KURIR'
+        const courierUsers = response.filter((user) => user.role === 'KURIR');
+        // console.log(courierUsers)
+        // Buat array baru yang berisi nama dan ID pengguna kurir
+        const couriers = courierUsers.map((user) => ({
+          id: user.id_user,
+          name: user.fullname,
+        }));
+        setCouriers(couriers);
+      } catch (error) {
+        console.error("Failed to fetch couriers: ", error);
+      }
+    };
+    fetchCouriers();
+  }, [token]);
+
+  console.log(selectedItems);
+
+  function formatPrice(price) {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(price);
+  }
+
+  const createNewOrder = async () => {
     try {
-      console.log("Processing payment:", amount, eWallet);
-      // Redirect to success page or display success message
-      navigate("/payment-success");
+      const response = await axios.post(
+        "http://localhost:3000/order",
+        {
+          selectedItems: selectedItems.map((item) => item.id),
+          kurirId: document.getElementById("courier").value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert(response.data.message);
+      navigate('/my-orders')
     } catch (error) {
-      console.error("Error during payment:", error.message);
+      alert("Failed to create order: ", error);
+      console.log(response.data.message)
     }
   };
 
   return (
     <div>
-      <Navbar />
-      <nav class="flex" aria-label="Breadcrumb">
-        <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-          <li class="inline-flex items-center">
-            <a
-              href="#"
-              class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-black-400 dark:hover:text-grey"
-            >
-              <svg
-                class="w-3 h-3 me-2.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                {" "}
-              </svg>
-              Cart
-            </a>
-          </li>
-          <li>
-            <div class="flex items-center">
-              <svg
-                class="rtl:rotate-180 w-3 h-3 text-black-400 mx-1"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 8 3-3-3-3"
-                />
-              </svg>
-              <a
-                href="#"
-                class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-black-400 dark:hover:text-grey"
-              >
-                Details
-              </a>
-            </div>
-          </li>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                class="rtl:rotate-180 w-3 h-3 text-black-400 mx-1"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 8 3-3-3-3"
-                />
-              </svg>
-              <a
-                href="#"
-                class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-black-400 dark:hover:text-grey"
-              >
-                Shipping
-              </a>
-            </div>
-          </li>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                class="rtl:rotate-180 w-3 h-3 text-black-400 mx-1"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 8 3-3-3-3"
-                />
-              </svg>
-              <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-black-400">
-                Payment
-              </span>
-            </div>
-          </li>
-        </ol>
-      </nav>
+      <Navbar auth={auth} />
       <div className="flex justify-between">
         <div className="w-1/2 ml-4">
           <div className="bg-gray-100 rounded-lg p-4 mt-7 shadow-md">
-            <div className="relative mb-6">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                <span className="w-20 text-gray-500 dark:text-gray-400 mr-2">
-                  Contact
-                </span>
-              </div>
-              <select
-                id="contact-select"
-                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-28 py-2.5 pr-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="name@flowbite.com">name@flowbite.com</option>
-                <option value="another_email@example.com">
-                  another_email@example.com
-                </option>
-                {/* Add more options as needed */}
-              </select>
-            </div>
-            <div className="relative mb-6">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                <span className="w-20 text-gray-500 dark:text-gray-400 mr-2">
-                  Ship to
-                </span>
-              </div>
-              <select
-                id="ship-to-select"
-                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-28 py-2.5 pr-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="address1">Address 1</option>
-                <option value="address2">Address 2</option>
-                {/* Add more options as needed */}
-              </select>
-            </div>
-            <div className="relative mb-6">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                <span className="w-20 text-gray-500 dark:text-gray-400 mr-2">
-                  Method
-                </span>
-              </div>
-              <select
-                id="method-select"
-                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-28 py-2.5 pr-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="method1">Method 1</option>
-                <option value="method2">Method 2</option>
-                {/* Add more options as needed */}
-              </select>
-            </div>
-
-            {/* Payment Method */}
-            <div className="relative mb-6">
+            <div className="mb-6">
               <label
-                htmlFor="credit-card"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                htmlFor="phone"
+                className="text-gray-500 dark:text-gray-400 mr-2"
               >
-                Credit Card
+                Nomor Telepon
               </label>
               <input
                 type="text"
-                id="credit-card"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 py-2.5 pr-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Card Number"
+                id="phone"
+                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                value={dataUser?.nomorTelepon}
+                readOnly
               />
             </div>
-            <div className="relative mb-6">
-              <input
-                type="text"
-                id="holder-name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 py-2.5 pr-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Holder Name"
-              />
-            </div>
-            <div className="flex justify-between mb-6">
-              <div className="relative w-1/2 mr-2">
-                <input
-                  type="text"
-                  id="expiry-date"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 py-2.5 pr-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="MM/YY"
-                />
-              </div>
-              <div className="relative w-1/2 ml-2">
-                <input
-                  type="text"
-                  id="cvv"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 py-2.5 pr-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="CVV"
-                />
-              </div>
-            </div>
-            {/* Tax Information */}
-            <div className="relative mb-6">
+            <div className="mb-6">
               <label
-                htmlFor="vat-number"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                htmlFor="address"
+                className="text-gray-500 dark:text-gray-400 mr-2"
               >
-                Tax Information
+                Alamat
               </label>
-              <input
-                type="text"
-                id="vat-number"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 py-2.5 pr-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="VAT Number (optional)"
-              />
-              <input
-                type="text"
-                id="pec"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full mt-2 pl-3 py-2.5 pr-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="PEC (optional)"
+              <textarea
+                id="address"
+                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4 resize-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                value={dataUser?.alamat}
+                readOnly
               />
             </div>
-
-            {/* Billing Address */}
-            <div className="relative mb-6">
+            <div className="mb-6">
               <label
-                htmlFor="billing-address"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                htmlFor="courier"
+                className="text-gray-500 dark:text-gray-400 mr-2"
               >
-                Billing Address
+                Kurir
               </label>
-              <div class="flex items-center mb-4">
+              <select
+                id="courier"
+                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                {couriers.map((courier) => (
+                  <option key={courier.id} value={courier.id}>
+                    {courier.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-6">
+              <span className="text-gray-500 dark:text-gray-400 mr-2">
+                Metode Pembayaran
+              </span>
+              <div>
                 <input
-                  id="default-checkbox"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  type="radio"
+                  id="saldoElektronik"
+                  name="paymentMethod"
+                  value="saldoElektronik"
+                  className="mr-2"
+                  checked
+                  readOnly
                 />
-                <label
-                  for="default-checkbox"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-black-300"
-                >
-                  Same as the shipping address
-                </label>
-              </div>
-              <div class="flex items-center mb-4">
-                <input
-                  id="default-checkbox"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label
-                  for="default-checkbox"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-black-300"
-                >
-                  Use a different address for billing
+                <label htmlFor="saldoElektronik">
+                  Saldo Elektronik ({formatPrice(dataUser?.saldoElektronik)})
                 </label>
               </div>
             </div>
-
-            {/* Buttons */}
             <div className="flex justify-between">
-              <button className="bg-blue-500 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-                Back to Shipping
+              <button
+                className="bg-blue-500 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+              >
+                Back
               </button>
-              <button className="bg-green-500 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50">
+              <button
+                onClick={createNewOrder}
+                className="bg-green-500 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
+              >
                 Pay Now
               </button>
             </div>
           </div>
         </div>
-        <div className="w-1/2 mt-7 ml-10">
-          <div className="bg-gray-100 rounded-lg p-4 mr-4 shadow-md">
-            <div className="flex items-center mb-4">
-              <img
-                src="rice-field-bali.jpg"
-                alt="Product"
-                className="w-16 h-16 mr-3 rounded-md"
-              />
-              <div>
-                <h2 className="text-lg font-medium text-gray-900 dark:text-black">
-                  Nama Produk
-                </h2>
-                <p className="text-sm text-gray-500 dark:text-black-400">
-                  Harga Produk ($)
-                </p>
-              </div>
-            </div>
-            <hr className="my-4 border-t border-gray-300 dark:border-black-700" />
-            <div className="flex justify-between items-center">
-              <p>Subtotal</p>
-              <p className="text-gray-900 dark:text-black">$9</p>
-            </div>
-            <div className="flex justify-between items-center">
-              <p>Shipping</p>
-              <p className="text-gray-900 dark:text-black">$1</p>
-            </div>
-            <hr className="my-2 border-t border-gray-300 dark:border-gray-700" />
-            <div className="flex justify-between items-center">
-              <p>Total</p>
-              <p className="text-lg font-semibold text-gray-900 dark:text-black">
-                $10
-              </p>
-            </div>
-          </div>
-        </div>
+        <ListProdukPembayaran products={selectedProduct} />
       </div>
     </div>
   );

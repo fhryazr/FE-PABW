@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 
 const useCartStore = create((set) => ({
   cartList: [],
+  selectedItems: [],
   setCartList: (cartList) => set({ cartList }),
   addToCart: (cartItem) =>
     set((state) => ({ cartList: [...state.cartList, cartItem] })),
@@ -16,12 +17,14 @@ const useCartStore = create((set) => ({
         item.id === id ? { ...item, quantity: newQuantity } : item
       ),
     })),
-    toggleSelectedItem: (id, isSelected) =>
+  toggleSelectedItem: (id, isSelected) =>
     set((state) => {
       const updatedCartList = state.cartList.map((item) =>
         item.id === id ? { ...item, isSelected } : item
       );
       Cookies.set("cart", JSON.stringify(updatedCartList), { expires: 7 });
+      const selectedItems = updatedCartList.filter(item => item.isSelected);
+      set({ selectedItems });
       return { cartList: updatedCartList };
     }),
 }));

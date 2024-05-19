@@ -14,7 +14,7 @@ function Navbar({ auth }) {
   const token = Cookies.get("token");
   const { logout } = useContext(AuthContext);
   const { cartList, setCartList } = useCartStore();
-  const [cartLen, setCartLen] = useState(cartList.lenght || 0);
+  const [cartLen, setCartLen] = useState(cartList.length || 0);
   // console.log(auth);
 
   const handleLogout = async () => {
@@ -24,6 +24,10 @@ function Navbar({ auth }) {
 
   const navigateCart = () => {
     navigate("/cart");
+  };
+
+  const navigateTo = (url) => {
+    navigate(url);
   };
 
   useEffect(() => {
@@ -87,12 +91,18 @@ function Navbar({ auth }) {
                 tabIndex={0}
                 className="menu menu-sm dropdown-content mt-3 z-[1] p-2 flex gap-1 shadow bg-base-100 rounded-md w-52">
                 <li>
-                  <a className="justify-between">Profile</a>
+                  <a onClick={()=> navigateTo('/profile')} className="justify-between">Profile</a>
                 </li>
                 <li>
                   <a className="justify-between">
                     <MyBalance />
                   </a>
+                </li>
+                <li>
+                  <a onClick={() => navigateTo('/my-orders')} className="justify-between">My Orders</a>
+                </li>
+                <li>
+                  <a onClick={() => navigateTo('/my-store')} className="justify-between">My Stores</a>
                 </li>
                 <li>
                   <a onClick={handleLogout}>Logout</a>
