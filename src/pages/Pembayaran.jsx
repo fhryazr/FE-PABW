@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import { useContext, useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 import { AuthContext } from "../context/AuthContext";
 import { getMe, getUsers } from "../api/auth";
 import Cookies from "js-cookie";
