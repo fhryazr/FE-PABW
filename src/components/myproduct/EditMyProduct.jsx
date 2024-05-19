@@ -1,23 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { editProduct, deleteProduct } from '../../api/product';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function EditProduct() {
+  const token = Cookies.get("token");
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState({
-    id: 1, // Ganti dengan ID produk yang sebenarnya
-    name: 'Shoes',
-    description: 'If a dog chews shoes whose shoes does he choose?',
-    price: 'Rp. 100.000',
-    imageSrc: 'https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg',
+    id: '',
+    name: '',
+    price: '',
+    stock: '',
+    status: '',
+    description: ''
   });
+  // console.log(id);
 
-  const handleChange = (event) => {
-    setProduct({ ...product, [event.target.name]: event.target.value });
+  useEffect(() => {
+    getProductDetails();
+  }, []);
+
+  const getProductDetails = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/products/${id}`);
+      // console.log(response);
+      setProduct(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleSubmit = (event) => {
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "stock" && parseInt(value) < 0) {
+      return;
+    }
+    setProduct({ ...product, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Simpan perubahan ke penyimpanan lokal (misalnya localStorage)
-    // Tampilkan pesan konfirmasi atau redirect ke halaman lain
-    console.log('Produk berhasil diedit!');
+    try {
+      await editProduct({ ...product, id }, token);
+      console.log(product);
+      navigate('/store');
+    } catch (error) {
+      console.log('Error editing product:', error.response ? error.response.data : error.message);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteProduct(id, token);
+      navigate('/store');
+    } catch (error) {
+      console.log('Error deleting product:', error.response ? error.response.data : error.message);
+    }
   };
 
   return (
@@ -38,19 +78,6 @@ function EditProduct() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="description" className="block text-gray-700 font-bold mb-2">
-            Description
-          </label>
-          <textarea
-            name="description"
-            id="description"
-            rows="5"
-            value={product.description}
-            onChange={handleChange}
-            className="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-        <div className="mb-4">
           <label htmlFor="price" className="block text-gray-700 font-bold mb-2">
             Price
           </label>
@@ -64,18 +91,57 @@ function EditProduct() {
           />
         </div>
         <div className="mb-4">
-          <img src={product.imageSrc} alt="Product Image" width={200} height={150} />
+          <label htmlFor="stock" className="block text-gray-700 font-bold mb-2">
+            Stock
+          </label>
+          <input
+            type="number"
+            name="stock"
+            id="stock"
+            value={product.stock}
+            onChange={handleChange}
+            className="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
         </div>
-        <div className="flex center-between"> {/* Added flexbox for button arrangement */}
+        <div className="mb-4">
+          <label htmlFor="status" className="block text-gray-700 font-bold mb-2">
+            Status
+          </label>
+          <select
+            name="status"
+            id="status"
+            value={product.status}
+            onChange={handleChange}
+            className="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <option value="available">Stok Tersedia</option>
+            <option value="out_of_stock">Stok Kosong</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label htmlFor="description" className="block text-gray-700 font-bold mb-2">
+            Description
+          </label>
+          <textarea
+            name="description"
+            id="description"
+            rows="5"
+            value={product.description}
+            onChange={handleChange}
+            className="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div className="flex justify-between">
           <button
             type="submit"
-            className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700"
           >
             Save Changes
           </button>
           <button
-            type="submit" // Assuming the Delete button also submits a form (modify if needed)
+            type="button"
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700"
+            onClick={handleDelete}
           >
             Delete Product
           </button>

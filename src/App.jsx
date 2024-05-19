@@ -9,6 +9,10 @@ import Dashboard from "./pages/Dashboard.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
 import Store from "./pages/StorePage.jsx";
 import EditProduct from "./components/myproduct/EditMyProduct.jsx";
+import OrderDetail from "./components/order/OrderDetail.jsx";
+import AddProduct from "./components/myproduct/AddMyProduct.jsx";
+// import { ProductProvider } from './context/ProductContext';
+// import MyProductList from './components/myproduct/MyProductList';
 
 
 function App() {
@@ -53,11 +57,17 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={ isUserAdmin ? <Dashboard /> : <Home replace/>} />
               <Route path="/store" element={<Store />} />
-              <Route path="/edit-product" element={<EditProduct/>} />
+              <Route path="/edit-product/:id" element={<EditProduct/>} />
+              <Route path="/order-detail" element={<OrderDetail/>} />
+              <Route path="/add-product" element={<AddProduct />} />
             </Routes>
           {/* </AuthContext.Provider> */}
         </main>
       </Router>
+{/* 
+      <ProductProvider>
+        <MyProductList />
+    </ProductProvider> */}
     </>
   );
 }

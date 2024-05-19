@@ -1,37 +1,41 @@
-import React from 'react';
-import MyProduct from './MyProduct';
-import { Table, TableBody, TableHead, TableHeadCell} from "flowbite-react";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import MyProduct from './myProduct';
+import { Table, TableBody, TableHead, TableHeadCell } from "flowbite-react";
+import { getAllProductsByUserID } from '../../api/product/index'; // Import fungsi getAllProducts
+import Cookies from 'js-cookie';
 
 function MyProductList() {
-  const products = [
-    { id: 1, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000'},
-    { id: 2, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000'},
-    { id: 3, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000'},
-    { id: 4, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000'},
-    { id: 5, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 6, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 7, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 8, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 9, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 10, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 11, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 12, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 13, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 14, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 15, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 16, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 17, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 18, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 19, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 20, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-  ];
+  const [products, setProducts] = useState();
+  const token = Cookies.get("token")
 
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const data = await getAllProductsByUserID(token); // Panggil fungsi getAllProducts untuk mengambil data dari API
+        setProducts(data);
+        // console.log(data)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchProducts();
+  }, []);
+  
   return (
     <div className="overflow-x-auto">
+      <div className="flex justify-end m-4">
+        <Link to="/add-product" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+          Add New Product
+        </Link>
+      </div>
       <Table hoverable>
         <TableHead>
+          <TableHeadCell>Product ID</TableHeadCell>
           <TableHeadCell>Image</TableHeadCell>
           <TableHeadCell>Product Name</TableHeadCell>
+          <TableHeadCell>Stock</TableHeadCell>
+          <TableHeadCell>Stock Status</TableHeadCell>
           <TableHeadCell>Description</TableHeadCell>
           <TableHeadCell>Price</TableHeadCell>
           <TableHeadCell>
@@ -39,8 +43,17 @@ function MyProductList() {
           </TableHeadCell>
         </TableHead>
         <TableBody className="divide-y">
-          {products.map((product) => (
-            <MyProduct key={product.id} name={product.name} price={product.price} description={product.description} imageSrc="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" /> // Replace with your image URL
+          {products?.map((product) => (
+            <MyProduct
+              key={product.id_product}
+              id={product.id_product}
+              name={product.namaProduk}
+              price={product.hargaProduk}
+              description={product.description}
+              imageSrc={JSON.parse(product.imagesProduct)}
+              stock = {product.stokProduk}
+              status = {product.statusProduk}
+            />
           ))}
         </TableBody>
       </Table>
