@@ -21,6 +21,7 @@ import MyProfile from "./pages/MyProfile.jsx";import Store from "./pages/StorePa
 import EditProduct from "./components/myproduct/EditMyProduct.jsx";
 import OrderDetail from "./components/order/OrderDetail.jsx";
 import AddProduct from "./components/myproduct/AddMyProduct.jsx";
+import PesananMasuk from "./pages/PesananMasuk.jsx";
 // import { ProductProvider } from './context/ProductContext';
 // import MyProductList from './components/myproduct/MyProductList';
 
@@ -87,9 +88,10 @@ function App() {
               element={<TransaksiPage />}
             />
             <Route
-              path="/my-store"
-              element={<TransaksiPage />}
+              path="/incoming-order"
+              element={<PesananMasuk />}
             />
+
             <Route path="*" element={<NotFound />} />
               <Route path="/store" element={<Store />} />
               <Route path="/edit-product/:id" element={<EditProduct/>} />

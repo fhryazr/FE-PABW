@@ -47,7 +47,7 @@ function CartList() {
             id={cart?.id}
             name={cart?.name}
             price={parseFloat(cart?.price)}
-            images={cart?.images}
+            images={JSON.parse(cart?.images)}
             quantity={parseInt(cart?.quantity)}
           />
         ))

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import MyProduct from './myProduct';
+import MyProduct from './MyProduct';
 import { Table, TableBody, TableHead, TableHeadCell } from "flowbite-react";
 import { getAllProductsByUserID } from '../../api/product/index'; // Import fungsi getAllProducts
 import Cookies from 'js-cookie';

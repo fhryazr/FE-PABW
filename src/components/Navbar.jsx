@@ -20,6 +20,7 @@ function Navbar({ auth }) {
 
   const handleLogout = async () => {
     await logout();
+    navigateTo("/")
     window.location.reload();
   };
 
@@ -103,16 +104,13 @@ function Navbar({ auth }) {
                   <a onClick={() => navigateTo('/my-orders')} className="justify-between">My Orders</a>
                 </li>
                 <li>
-                  <a onClick={() => navigateTo('/my-store')} className="justify-between">My Stores</a>
-                </li>
-                <li>
                   <Link to={"/store"}>
                   <a className="justify-between">My Store</a>
                   </Link>
                 </li>
                 <li>
-                  <Link to={"/store"}>
-                  <a className="justify-between">My Store</a>
+                  <Link to={"/incoming-order"}>
+                  <a className="justify-between">Incoming Order</a>
                   </Link>
                 </li>
                 <li>
