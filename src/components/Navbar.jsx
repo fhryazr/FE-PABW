@@ -8,6 +8,8 @@ import useCartStore from "../store/cartStore";
 import { getCart } from "../api/cart";
 import Cookies from "js-cookie";
 import MyBalance from "./MyBalance";
+import TransactionHistoryModal from "./TransactionHistoryModal";
+
 
 function Navbar({ auth }) {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ function Navbar({ auth }) {
   const { logout } = useContext(AuthContext);
   const { cartList, setCartList } = useCartStore();
   const [cartLen, setCartLen] = useState(cartList.length || 0);
+  const [showModal, setShowModal] = useState(false);
   // console.log(auth);
 
   const handleLogout = async () => {
@@ -102,7 +105,7 @@ function Navbar({ auth }) {
                   <a onClick={() => navigateTo('/my-orders')} className="justify-between">My Orders</a>
                 </li>
                 <li>
-                  <a onClick={() => navigateTo('/my-store')} className="justify-between">My Stores</a>
+                  <a onClick={() => setShowModal(true)} className="justify-between">Transactions History</a>
                 </li>
                 <li>
                   <a onClick={handleLogout}>Logout</a>
@@ -119,6 +122,7 @@ function Navbar({ auth }) {
           )}
         </div>
       </div>
+      <TransactionHistoryModal showModal={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 }
