@@ -31,10 +31,10 @@ export function SidebarDashboard() {
           <Sidebar.Item href="/dashboard/products" icon={HiShoppingBag}>
             Products
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiShoppingBag}>
+          <Sidebar.Item href="/dashboard/orders" icon={HiShoppingBag}>
             Order
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiShoppingBag}>
+          <Sidebar.Item href="/dashboard/logs" icon={HiShoppingBag}>
             Logs
           </Sidebar.Item>
           <Sidebar.Item className="cursor-pointer" onClick={()=>handleLogout()} icon={HiOutlineLogout}>
