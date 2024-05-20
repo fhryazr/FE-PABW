@@ -8,6 +8,8 @@ import useCartStore from "../store/cartStore";
 import { getCart } from "../api/cart";
 import Cookies from "js-cookie";
 import MyBalance from "./MyBalance";
+import TransactionHistoryModal from "./TransactionHistoryModal";
+
 import { Link } from "react-router-dom";
 
 function Navbar({ auth }) {
@@ -15,7 +17,8 @@ function Navbar({ auth }) {
   const token = Cookies.get("token");
   const { logout } = useContext(AuthContext);
   const { cartList, setCartList } = useCartStore();
-  const [cartLen, setCartLen] = useState(cartList.lenght || 0);
+  const [cartLen, setCartLen] = useState(cartList.length || 0);
+  const [showModal, setShowModal] = useState(false);
   // console.log(auth);
 
   const handleLogout = async () => {
@@ -25,6 +28,10 @@ function Navbar({ auth }) {
 
   const navigateCart = () => {
     navigate("/cart");
+  };
+
+  const navigateTo = (url) => {
+    navigate(url);
   };
 
   useEffect(() => {
@@ -48,7 +55,7 @@ function Navbar({ auth }) {
   }, [token, cartList.length, setCartList, auth]);
 
   return (
-    <div className="sticky top-0 mx-auto md:px-8 navbar justify-center bg-white shadow-lg z-10">
+    <div className="sticky top-0 mx-auto md:px-8 navbar justify-center bg-white shadow-lg z-10 mb-4">
       {/* Logo */}
       <div className="flex-1">
         <a className="pl-2 text-xl">E-Commerce</a>
@@ -78,7 +85,8 @@ function Navbar({ auth }) {
               <div
                 tabIndex={0}
                 role="button"
-                className="btn btn-ghost btn-circle">
+                className="btn btn-ghost btn-circle"
+              >
                 <div className="avatar placeholder">
                   <FaRegUser className="text-lg md:text-2xl" />
                 </div>
@@ -87,12 +95,18 @@ function Navbar({ auth }) {
                 tabIndex={0}
                 className="menu menu-sm dropdown-content mt-3 z-[1] p-2 flex gap-1 shadow bg-base-100 rounded-md w-52">
                 <li>
-                  <a className="justify-between">Profile</a>
+                  <a onClick={()=> navigateTo('/profile')} className="justify-between">Profile</a>
                 </li>
                 <li>
                   <a className="justify-between">
                     <MyBalance />
                   </a>
+                </li>
+                <li>
+                  <a onClick={() => navigateTo('/my-orders')} className="justify-between">My Orders</a>
+                </li>
+                <li>
+                  <a onClick={() => setShowModal(true)} className="justify-between">Transactions History</a>
                 </li>
                 <li>
                   <Link to={"/store"}>
@@ -114,6 +128,7 @@ function Navbar({ auth }) {
           )}
         </div>
       </div>
+      <TransactionHistoryModal showModal={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 }
