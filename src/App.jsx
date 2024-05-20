@@ -7,6 +7,9 @@ import Home from "./pages/Home.jsx";
 import getDecodedToken from "./api/auth/getDecodedToken.js";
 import Dashboard from "./pages/Dashboard.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
+import CartPage from "./pages/CartPage.jsx";
+import DetailProductPage from "./pages/DetailProductPage.jsx";
+import NotFound from "./pages/NotFound.jsx";
 // import Store from "./pages/StorePage.jsx";
 import Kurir from "./pages/Kurir.jsx";
 import ProfilPage from "./components/kurir/ProfilPage";
@@ -24,6 +27,7 @@ function App() {
       if (token) {
         try {
           const res = await getDecodedToken(token);
+          console.log(res)
           setAuth({
             userId: res.userId,
             fullname: res.fullname,
@@ -31,7 +35,7 @@ function App() {
           });
           if (res.role === "ADMIN") {
             setIsUserAdmin(true);
-          }
+          } 
         } catch (error) {
           console.log(error);
         }
@@ -47,13 +51,16 @@ function App() {
   return (
     <>
       <Router>
-        <main className="w-screen h-screen">
+        <main className="w-full h-screen">
           {/* <AuthContext.Provider value={{ auth, setAuth }}> */}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={ !auth ? <Login /> : <Navigate replace to='/'/>} />
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={ isUserAdmin ? <Dashboard /> : <Home replace/>} />
+              <Route path="/cart" element={ <CartPage />} />
+              <Route path="/product/:id_product" element={ <DetailProductPage/>} />
+              <Route path="*" element={ <NotFound/>} />
               {/* <Route path="/store" element={<Store />} /> */}
               <Route path="/kurir" element={<Kurir/>} />
               <Route path="/kurir/profil" element={<ProfilPage />} />
