@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { BsPencilSquare, BsTruck, BsCheckCircle, BsClockHistory, BsSave, BsArrowReturnLeft } from 'react-icons/bs';
+import Cookies from 'js-cookie';
 
 function Order({ orderDate, jumlahBarang, total_harga, status, product, id_detailPesanan }) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(status);
   const [marginStyle, setMarginStyle] = useState({ marginLeft: '-12rem', marginRight: '25rem' });
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImZ1bGxuYW1lIjoiZ2FtZXIiLCJyb2xlIjoiS1VSSVIiLCJpYXQiOjE3MTYxNDE5NjAsImV4cCI6MTcxNjE1Mjc2MH0.qmd4s_ueWUZrDtjerWAebjAaZlHblESnfy2GZdFxZbM';
+  // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImZ1bGxuYW1lIjoiZ2FtZXIiLCJyb2xlIjoiS1VSSVIiLCJpYXQiOjE3MTYxNzg3OTMsImV4cCI6MTcxNjE4OTU5M30._QckkfPNai3fw_nfIMWPthkUvmxjVJ1gG5H29PBYWaY';
+  const token = Cookies.get('token')
 
   const handleStatusChange = (newStatus) => {
     setCurrentStatus(newStatus);
@@ -22,7 +24,8 @@ function Order({ orderDate, jumlahBarang, total_harga, status, product, id_detai
         'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({
-        status: currentStatus.toLowerCase(),
+        orderDetailId: id_detailPesanan,
+        newStatus: currentStatus.toLowerCase(),
       })
     })
     .then(response => {

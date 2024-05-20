@@ -7,7 +7,7 @@ function OrderList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImZ1bGxuYW1lIjoiZ2FtZXIiLCJyb2xlIjoiS1VSSVIiLCJpYXQiOjE3MTYxNDI4NjUsImV4cCI6MTcxNjE1MzY2NX0.YE-Im9sKYOBBQpu-thjV6bnrh1V5IzIqZ6s7Ov-znm4';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImZ1bGxuYW1lIjoiZ2FtZXIiLCJyb2xlIjoiS1VSSVIiLCJpYXQiOjE3MTYxNzg3OTMsImV4cCI6MTcxNjE4OTU5M30._QckkfPNai3fw_nfIMWPthkUvmxjVJ1gG5H29PBYWaY';
 
     fetch('http://localhost:3000/order/kurir', {
       headers: {
