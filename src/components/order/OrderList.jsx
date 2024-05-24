@@ -48,7 +48,7 @@ function OrderList() {
               status={detail.status}
               product={detail.product}
               id_detailPesanan={detail.id_detailPesanan}
-            />
+            /> 
           ))}
         </div>
       ))}
