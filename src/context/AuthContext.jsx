@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  console.log(auth)
+  // console.log(auth)
   const logout = () => {
     // Implementasi logout API
     Cookies.remove("token");
