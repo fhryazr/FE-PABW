@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Order from './Order';
+import Cookies from 'js-cookie';
 
 function OrderList() {
   const [orders, setOrders] = useState([]);
@@ -7,7 +8,7 @@ function OrderList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImZ1bGxuYW1lIjoiZ2FtZXIiLCJyb2xlIjoiS1VSSVIiLCJpYXQiOjE3MTYxNzg3OTMsImV4cCI6MTcxNjE4OTU5M30._QckkfPNai3fw_nfIMWPthkUvmxjVJ1gG5H29PBYWaY';
+    const token = Cookies.get('token')
 
     fetch('http://localhost:3000/order/kurir', {
       headers: {

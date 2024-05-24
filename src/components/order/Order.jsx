@@ -6,8 +6,7 @@ import Cookies from 'js-cookie';
 function Order({ orderDate, jumlahBarang, total_harga, status, product, id_detailPesanan }) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(status);
-  const [marginStyle, setMarginStyle] = useState({ marginLeft: '-12rem', marginRight: '25rem' });
-  // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImZ1bGxuYW1lIjoiZ2FtZXIiLCJyb2xlIjoiS1VSSVIiLCJpYXQiOjE3MTYxNzg3OTMsImV4cCI6MTcxNjE4OTU5M30._QckkfPNai3fw_nfIMWPthkUvmxjVJ1gG5H29PBYWaY';
+  const [marginStyle, setMarginStyle] = useState({ marginLeft: '-8rem'});
   const token = Cookies.get('token')
 
   const handleStatusChange = (newStatus) => {
@@ -37,7 +36,7 @@ function Order({ orderDate, jumlahBarang, total_harga, status, product, id_detai
     .then(data => {
       console.log('Status updated successfully', data);
       setIsEditing(false);
-      setMarginStyle({ marginLeft: '-10rem', marginRight: '20rem' });
+      setMarginStyle({ marginLeft: '-8rem'});
     })
     .catch(error => {
       console.error('There was an error updating the status!', error);
@@ -46,7 +45,7 @@ function Order({ orderDate, jumlahBarang, total_harga, status, product, id_detai
   
   const handleEditClick = () => {
     setIsEditing(true);
-    setMarginStyle({ marginLeft: '-8rem', marginRight: '-11rem' });
+    setMarginStyle({ marginLeft: '5rem', marginRight: '-50rem'});
   };
 
   const formatDate = (dateString) => {
@@ -60,7 +59,7 @@ function Order({ orderDate, jumlahBarang, total_harga, status, product, id_detai
       <div className="flex items-center">
         <figure className="w-1/4">
           <img
-            src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
+            src="https://i.pinimg.com/564x/ee/aa/dc/eeaadc6d3f1d2b0642ff3f62ff7599a7.jpg"
             alt={product.namaProduk}
             className="w-full h-full object-cover"
           />
@@ -69,13 +68,13 @@ function Order({ orderDate, jumlahBarang, total_harga, status, product, id_detai
           <p>Order Date: {formatDate(orderDate)}</p>
           <p>Jumlah Barang: {jumlahBarang}</p>
           <p>Total Harga: {total_harga}</p>
-          <p>Status: {currentStatus}</p>
+          <p>Status: {currentStatus.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</p>
           <div className="mt-2">
-            <h4>Product Details:</h4>
+            <h4 className="font-bold">Product Details:</h4>
             <p>Nama Produk: {product.namaProduk}</p>
             <p>Harga Produk: {product.hargaProduk}</p>
             <p>Stok Produk: {product.stokProduk}</p>
-            <p>Status Produk: {product.statusProduk}</p>
+            <p>Status Produk: <span className="font-bold">{product.statusProduk}</span></p>
             <p>Description: {product.description}</p>
           </div>
           <div className="card-actions mt-2">
@@ -89,7 +88,7 @@ function Order({ orderDate, jumlahBarang, total_harga, status, product, id_detai
                   <BsTruck /> Sedang Dikirim
                 </button>
                 <button
-                  className={`btn btn-outline text-[10px] md:text-lg ${currentStatus === 'Sampai di Tujuan' ? 'bg-blue-400 text-white' : ''}`}
+                  className={`btn btn-outline text-[10px] md:text-lg ${currentStatus === 'Sampai Di Tujuan' ? 'bg-blue-400 text-white' : ''}`}
                   onClick={() => handleStatusChange('Sampai di Tujuan')}
                 >
                   <BsCheckCircle /> Sampai di Tujuan

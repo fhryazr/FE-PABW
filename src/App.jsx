@@ -21,7 +21,6 @@ import MyProfile from "./pages/MyProfile.jsx";// import Store from "./pages/Stor
 import Kurir from "./pages/Kurir.jsx";
 import ProfilPage from "./components/kurir/ProfilPage";
 import ListPesananPage from "./components/kurir/ListPesananPage";
-import UbahSandi from "./components/kurir/UbahSandi";
 
 function App() {
   // const [auth, setAuth] = useState(null);
@@ -93,7 +92,6 @@ function App() {
               <Route path="/kurir" element={<Kurir/>} />
               <Route path="/kurir/profil" element={<ProfilPage />} />
               <Route path="/kurir/list-pesanan" element={<ListPesananPage />} />
-              <Route path="/kurir/ubah-kata-sandi" element={<UbahSandi />} />
           </Routes>
           {/* </AuthContext.Provider> */}
         </main>
