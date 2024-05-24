@@ -74,15 +74,15 @@ function App() {
             />
             <Route path="/register" element={<Register />} />
             <Route
+              path="/product/:id_product"
+              element={<DetailProductPage />}
+            />
+            <Route
               path="/dashboard/*"
               element={isUserAdmin ? <Dashboard /> : <Home replace />}
             />
             <Route path="/pembayaran" element={<Pembayaran />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route
-              path="/product/:id_product"
-              element={<DetailProductPage />}
-            />
+              <Route path="/cart" element={<CartPage />} />
             <Route
               path="/my-orders"
               element={<TransaksiPage />}

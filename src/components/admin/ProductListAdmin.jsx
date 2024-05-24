@@ -115,7 +115,7 @@ export default function ProductListAdmin() {
                 <td>
                   <div className="flex items-center gap-1">
                     <img
-                      src={product.imagesProduct}
+                      src={JSON.parse(product.imagesProduct)}
                       alt=""
                       style={{
                         height: "5rem",

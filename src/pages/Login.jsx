@@ -63,10 +63,10 @@ function Login() {
             Login
           </button>
         </form>
-        <p className="flex justify-center text-neutral-400">or sign in with</p>
+        {/* <p className="flex justify-center text-neutral-400">or sign in with</p>
         <button className="h-[43px] bg-white rounded-[5px] border border-black">
           Sign in using Google
-        </button>
+        </button> */}
         <p className="flex justify-center text-neutral-400">
           Don&apos;t have account?
           <a href="register" className="text-green-400 font-medium">

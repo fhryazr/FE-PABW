@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 
 const ProductDetail = () => {
   const { id_product } = useParams(); // Mendapatkan parameter dari URL
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState();
   const { setCartList } = useCartStore();
   const token = Cookies.get("token");
   const navigate = useNavigate();
@@ -25,6 +25,8 @@ const ProductDetail = () => {
     };
     fetchProduct();
   }, [id_product]);
+
+  console.log(id_product)
 
   function formatPrice(price) {
     return new Intl.NumberFormat("id-ID", {
