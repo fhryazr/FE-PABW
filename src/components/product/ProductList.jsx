@@ -1,35 +1,30 @@
-import Product from './Product'; // Pastikan path sesuai dengan struktur proyek Anda
+import Product from './Product';
+import { useEffect, useState, useCallback } from 'react';
+import { getAllProducts } from '../../api/product';
 
 function ProductList() {
-  // Data produk dapat diambil dari API, disimpan dalam state, atau langsung didefinisikan di sini
-  const products = [
-    { id: 1, name: 'Vintage Leather Messenger Bag Flap Over Crossbody Bag Lorem10alksjd aksjd akjsd laksjdlakjsd ', description: 'If a dog chews shoes whos Lorem ipsum dolor sit, amet consectetur adipisicing elit. Architecto reiciendis necessitatibus nostrum odio assumenda sed ipsum eligendi cum quae maiores? asdfasdfsadf shoes does he choose?', price: 'Rp. 100.000'},
-    { id: 2, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000'},
-    { id: 3, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000'},
-    { id: 4, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000'},
-    { id: 5, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 6, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 7, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 8, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 9, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 10, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 11, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 12, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 13, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 14, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 15, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 16, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 17, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 18, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 19, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-    { id: 20, name: 'Shoes', description: 'If a dog chews shoes whose shoes does he choose?', price: 'Rp. 100.000' },
-  ];
+  const [productList, setProductList] = useState()
+
+  const fetchAllProducts = useCallback(async () => {
+    const allProducts = await getAllProducts()
+    setProductList(allProducts)
+}, []);
+
+  useEffect(() => {
+    fetchAllProducts();
+  }, [fetchAllProducts])
+
+  // console.log(productList);
 
   return (
     <div className="grid px-2 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2">
-      {products.map((product) => (
-        <Product key={product.id} name={product.name} description={product.description} price={product.price} />
-      ))}
+      {productList ? (
+        productList.map((product) => (
+            <Product key={product.id_product} id={product.id_product} name={product.namaProduk} description={product.statusProduk} price={product.hargaProduk} images={product.imagesProduct[0]} />
+        ))
+    ) : (
+        <p>Tidak ada produk</p>
+    )}
     </div>
   );
 }
