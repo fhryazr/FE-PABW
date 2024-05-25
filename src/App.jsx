@@ -30,19 +30,27 @@ import ListPesananPage from "./components/kurir/ListPesananPage";
 import Store from "./pages/StorePage.jsx";
 import ForgetPassword from "./pages/ForgetPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import Verify from "./pages/Verify.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import { getMe } from "./api/auth/index.js";
+
 
 function App() {
   // const [auth, setAuth] = useState(null);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth, isVerified, setIsVerified } = useContext(AuthContext);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
   const [isUserKurir, setIsUserKurir] = useState(false);
   const token = Cookies.get("token");
-  // const navigate = useNavigate()
+  console.log(isVerified);
 
   useEffect(() => {
     const authorization = async () => {
       if (token) {
         try {
+          const token = Cookies.get("token");
+          const status = await getMe(token);
+          setIsVerified(status.isVerified);
+
           const res = await getDecodedToken(token);
           console.log(res);
           setAuth({
@@ -52,7 +60,8 @@ function App() {
           });
           if (res.role === "ADMIN") {
             setIsUserAdmin(true);
-          } else if (res.role === "KURIR") { // Menambahkan kondisi untuk menandai apakah pengguna adalah kurir
+          } else if (res.role === "KURIR") {
+            // Menambahkan kondisi untuk menandai apakah pengguna adalah kurir
             setIsUserKurir(true);
           }
         } catch (error) {
@@ -62,7 +71,7 @@ function App() {
     };
 
     authorization();
-  }, [setAuth, token]);
+  }, [setAuth, token, setIsVerified]);
 
   // Pengecekan apakah auth sudah terisi sebelum mengakses propertinya
   // console.log(auth);
@@ -78,7 +87,13 @@ function App() {
             )}
             <Route
               path="/"
-              element={!isUserAdmin ? <Home /> : <Navigate to={"/dashboard"} />}
+              element={
+                !isUserAdmin ? (
+                  <Home auth={auth} token={token} isVerified={isVerified} />
+                ) : (
+                  <Navigate to={"/dashboard"} />
+                )
+              }
             />
             <Route path="/profile" element={<MyProfile />} />
             <Route
@@ -109,6 +124,7 @@ function App() {
             <Route path="/kurir" element={<Kurir />} />
             <Route path="/kurir/profil" element={<ProfilPage />} />
             <Route path="/kurir/list-pesanan" element={<ListPesananPage />} />
+            <Route path="/auth/verify-email" element={<Verify />} />
           </Routes>
           {/* </AuthContext.Provider> */}
         </main>

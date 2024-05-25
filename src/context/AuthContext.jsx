@@ -1,16 +1,18 @@
 /* eslint-disable react/prop-types */
-import Cookies from 'js-cookie';
-import { createContext } from 'react';
-import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
+import { createContext } from "react";
+import { useState } from "react";
+import { getMe } from "../api/auth";
+import { Link } from "react-router-dom";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState(null);
-  const [error, setError] = useState(null);
-  // const navigate = useNavigate()
-  
+  const [auth, setAuth] = useState();
+  const [error, setError] = useState();
+  const [isVerified, setIsVerified] = useState();
+
+
   const login = async (email, password) => {
     // Implementasi login API
     try {
@@ -25,11 +27,12 @@ const AuthProvider = ({ children }) => {
         }),
       });
 
+      
       const result = await response.json();
-  
+      
       if (response.ok) {
         Cookies.set("token", result.token, { expires: 3 / 24 });
-        setAuth(result)
+        setAuth(result);
       } else {
         setError(result.msg);
         console.error("Error during login:", result.msg);
@@ -44,11 +47,13 @@ const AuthProvider = ({ children }) => {
     // Implementasi logout API
     Cookies.remove("token");
     setAuth(null);
+    setIsVerified(false);
+    Link('/')
   };
 
   return (
     <AuthContext.Provider
-      value={{ auth, setAuth, login, logout, error, setError }}
+      value={{ auth, setAuth, login, logout, error, setError, isVerified, setIsVerified }}
     >
       {children}
     </AuthContext.Provider>
