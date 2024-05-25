@@ -116,7 +116,7 @@ function UserList() {
               <th>ID</th>
               <th>Name</th>
               <th>Email</th>
-              <th>Address</th>
+              <th className="w-[25%]">Address</th>
               <th>Phone Number</th>
               <th>SaldoElektronik</th>
               <th>Role</th>

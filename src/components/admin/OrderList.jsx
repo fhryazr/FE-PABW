@@ -100,7 +100,7 @@ function OrderList() {
                     <td>
                       <div className="flex items-center">
                         <img
-                          src={JSON.parse(detail?.product?.imagesProduct) }
+                          src={detail?.product?.imagesProduct[0]}
                           alt={detail?.product?.namaProduk}
                           className="w-16 h-16 object-cover rounded"
                         />

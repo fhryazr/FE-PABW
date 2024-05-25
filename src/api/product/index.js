@@ -4,7 +4,7 @@ import axios from "axios";
 export const getProductById = async (productId) => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/products/${productId}"
+      `http://localhost:3000/products/${productId}`
     );
     return response.data.data;
   } catch (error) {

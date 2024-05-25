@@ -50,7 +50,7 @@ function MyProductList() {
               name={product.namaProduk}
               price={product.hargaProduk}
               description={product.description}
-              imageSrc={JSON.parse(product.imagesProduct)}
+              imageSrc={product.imagesProduct[0]}
               stock = {product.stokProduk}
               status = {product.statusProduk}
             />

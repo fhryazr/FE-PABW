@@ -11,7 +11,7 @@ function ListProdukPembayaran({ products }) {
             className="flex flex-col p-4 shadow-md mr-4">
             <div className="flex items-center mb-4">
               <img
-                src={JSON.parse(product.images)}
+                src={product.images[0]}
                 alt="Product"
                 className="w-16 h-16 mr-3 rounded-md"
               />
