@@ -24,7 +24,7 @@ function Order({ id, name, price, description, imageSrc }) {
         </Link>
       </TableCell>
     </TableRow>
-  );
+  )
 }
 
 Order.propTypes = {
@@ -33,6 +33,6 @@ Order.propTypes = {
   price: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   imageSrc: PropTypes.string.isRequired,
-};
+}
 
 export default Order;

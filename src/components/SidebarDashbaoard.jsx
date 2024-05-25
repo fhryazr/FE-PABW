@@ -11,6 +11,7 @@ export function SidebarDashboard() {
 
   const handleLogout = async () => {
     await logout();
+    navigateTo("/")
     window.location.reload();
   };
 

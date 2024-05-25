@@ -45,7 +45,6 @@ function OrderList() {
         </TableBody>
       </Table>
     </div>
-  );
-}
+)}
 
 export default OrderList;

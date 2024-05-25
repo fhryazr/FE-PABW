@@ -6,7 +6,5 @@ function OrderWrapper() {
       <h1 className="text-2xl text-center font-bold mb-8">Order</h1>
         <OrderList />
     </div>
-  );
-}
-
+  )}
 export default OrderWrapper;

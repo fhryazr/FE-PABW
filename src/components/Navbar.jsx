@@ -8,8 +8,8 @@ import useCartStore from "../store/cartStore";
 import { getCart } from "../api/cart";
 import Cookies from "js-cookie";
 import MyBalance from "./MyBalance";
-import { Link } from "react-router-dom";
 import TransactionHistoryModal from "./TransactionHistoryModal";
+import { Link } from "react-router-dom";
 
 
 function Navbar({ auth }) {
@@ -108,6 +108,8 @@ function Navbar({ auth }) {
                 </li>
                 <li>
                   <a onClick={() => setShowModal(true)} className="justify-between">Transactions History</a>
+                </li>
+                <li>
                   <Link to={"/store"}>
                   <a className="justify-between">My Store</a>
                   </Link>
